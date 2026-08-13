@@ -339,12 +339,7 @@ function setupEventListeners() {
     chrome.tabs.create({ url: chrome.runtime.getURL('dashboard.html') });
   });
 
-  // Listen to messages from content script
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message.action === 'SELECTOR_PICKED') {
-      handleSelectorPicked(message.column, message.selector);
-    }
-  });
+
 
   // Watch for storage updates to keep sidebar in sync with dashboard
   chrome.storage.onChanged.addListener((changes) => {
@@ -433,17 +428,4 @@ function triggerSidebarSelectorPicker(columnName, btn) {
   });
 }
 
-// Receive picked selector from content script
-function handleSelectorPicked(column, selector) {
-  let pickBtn = document.querySelector(`.btn-pick[data-col="${column}"]`);
-  
-  mappings = mappings.map(m => m.column === column ? { ...m, selector } : m);
-  chrome.storage.local.set({ mappings }, () => {
-    renderMappings();
-  });
 
-  if (pickBtn) {
-    pickBtn.classList.remove('active-picking');
-    pickBtn.textContent = '🎯 Pick';
-  }
-}

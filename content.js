@@ -230,26 +230,52 @@ function getUniqueSelector(el) {
   return path.join(' > ');
 }
 
-// Form Filling logic
+// Form Filling logic with retry loop for dynamic/dependent fields
 function fillFormFields(row, mappings, config) {
   if (!row || !row.data) return;
 
   console.log(`Autofilling row #${row.id}...`, row.data);
   
-  mappings.forEach(mapping => {
-    if (!mapping.selector) return;
-    
-    const value = row.data[mapping.column];
-    if (value === undefined) return;
+  let attempts = 0;
+  const maxAttempts = 3;
+  const attemptDelay = 250; // ms between retries
+  
+  let pendingMappings = [...mappings];
 
-    // Use querySelectorAll to handle group inputs
-    const elements = document.querySelectorAll(mapping.selector);
-    if (elements.length === 0) return;
+  function tryFill() {
+    attempts++;
+    const nextPending = [];
 
-    fillElements(elements, value);
-  });
+    pendingMappings.forEach(mapping => {
+      if (!mapping.selector) return;
+      
+      const value = row.data[mapping.column];
+      if (value === undefined) return;
 
-  // Auto-submit triggers (Only if automated and submit selector mapped)
+      const elements = document.querySelectorAll(mapping.selector);
+      if (elements.length > 0) {
+        fillElements(elements, value);
+      } else {
+        // Elements not found yet, save for next attempt
+        nextPending.push(mapping);
+      }
+    });
+
+    pendingMappings = nextPending;
+
+    // If there are still pending mappings, retry after a delay
+    if (pendingMappings.length > 0 && attempts < maxAttempts) {
+      setTimeout(tryFill, attemptDelay);
+    } else {
+      // Auto-submit triggers
+      handleAutoSubmit(row, config);
+    }
+  }
+
+  tryFill();
+}
+
+function handleAutoSubmit(row, config) {
   if (config.mode === 'automated' && config.submitSelector) {
     const submitBtn = document.querySelector(config.submitSelector);
     if (submitBtn) {

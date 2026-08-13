@@ -348,25 +348,33 @@ function setupEventListeners() {
   chrome.runtime.onMessage.addListener((message) => {
     if (message.action === 'STATE_UPDATED') {
       loadStateFromStorage();
-    } else if (message.action === 'SELECTOR_PICKED') {
-      handleSelectorPicked(message.column, message.selector);
     }
   });
 }
 
 // Handle Element Picker initiation
 function triggerSelectorPicker(columnName) {
-  chrome.tabs.query({ currentWindow: true }, (tabs) => {
+  // Query all tabs in all windows
+  chrome.tabs.query({}, (tabs) => {
     const webpageTabs = tabs.filter(t => !t.url.startsWith('chrome-extension://') && !t.url.startsWith('chrome://'));
     
     if (webpageTabs.length === 0) {
-      alert('Please open your target form webpage in another tab first!');
+      alert('Please open your target form webpage first!');
       return;
     }
 
-    const pickBtn = columnName === 'SUBMIT_BUTTON' 
-      ? pickSubmitBtn 
-      : document.querySelector(`.btn-pick[data-col="${columnName}"]`);
+    let pickBtn = null;
+    if (columnName === 'SUBMIT_BUTTON') {
+      pickBtn = pickSubmitBtn;
+    } else {
+      const pickButtons = document.querySelectorAll('.btn-pick');
+      for (let btn of pickButtons) {
+        if (btn.dataset.col === columnName) {
+          pickBtn = btn;
+          break;
+        }
+      }
+    }
 
     if (webpageTabs.length === 1) {
       selectTabForPicker(webpageTabs[0], columnName, pickBtn);
@@ -431,41 +439,21 @@ function selectTabForPicker(tab, columnName, pickBtn) {
     pickBtn.textContent = 'Picking...';
   }
 
-  chrome.tabs.update(tab.id, { active: true }, () => {
-    chrome.tabs.sendMessage(tab.id, {
-      action: 'START_SELECTOR_PICKER',
-      column: columnName
-    }).catch(() => {
-      alert('Could not start picker. Try refreshing the target web page first.');
-      if (pickBtn) {
-        pickBtn.classList.remove('active-picking');
-        pickBtn.textContent = '🎯 Pick';
-      }
+  // Focus the window first, then activate the tab and message it
+  chrome.windows.update(tab.windowId, { focused: true }, () => {
+    chrome.tabs.update(tab.id, { active: true }, () => {
+      chrome.tabs.sendMessage(tab.id, {
+        action: 'START_SELECTOR_PICKER',
+        column: columnName
+      }).catch(() => {
+        alert('Could not start picker. Try refreshing the target web page first.');
+        if (pickBtn) {
+          pickBtn.classList.remove('active-picking');
+          pickBtn.textContent = '🎯 Pick';
+        }
+      });
     });
   });
-}
-
-// Receive picked selector from target page
-function handleSelectorPicked(column, selector) {
-  // Re-enable picker UI button
-  let pickBtn = null;
-  if (column === 'SUBMIT_BUTTON') {
-    pickBtn = pickSubmitBtn;
-    config.submitSelector = selector;
-    submitSelectorInput.value = selector;
-    saveConfig();
-  } else {
-    pickBtn = document.querySelector(`.btn-pick[data-col="${column}"]`);
-    mappings = mappings.map(m => m.column === column ? { ...m, selector } : m);
-    chrome.storage.local.set({ mappings }, () => {
-      renderMappings();
-    });
-  }
-
-  if (pickBtn) {
-    pickBtn.classList.remove('active-picking');
-    pickBtn.textContent = '🎯 Pick';
-  }
 }
 
 // Clear database helper

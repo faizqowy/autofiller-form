@@ -43,6 +43,30 @@ const tabStates = {};
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const tabId = sender.tab ? sender.tab.id : null;
 
+  if (message.action === 'SELECTOR_PICKED') {
+    const column = message.column;
+    const selector = message.selector;
+    
+    chrome.storage.local.get(['mappings', 'config'], (result) => {
+      let mappings = result.mappings || [];
+      let config = result.config || {};
+      
+      if (column === 'SUBMIT_BUTTON') {
+        config.submitSelector = selector;
+        chrome.storage.local.set({ config }, () => {
+          chrome.runtime.sendMessage({ action: 'STATE_UPDATED' }).catch(() => {});
+        });
+      } else {
+        mappings = mappings.map(m => m.column === column ? { ...m, selector } : m);
+        chrome.storage.local.set({ mappings }, () => {
+          chrome.runtime.sendMessage({ action: 'STATE_UPDATED' }).catch(() => {});
+        });
+      }
+    });
+    sendResponse({ status: 'selector_picked_processed' });
+    return true;
+  }
+
   if (message.action === 'CONTENT_SCRIPT_READY') {
     if (tabId) {
       if (!tabStates[tabId]) tabStates[tabId] = {};
