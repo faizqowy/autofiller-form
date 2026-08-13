@@ -1,0 +1,366 @@
+/* Injected Styling for Smart Form Autofiller */
+
+/* Picker Cursor and Overlay */
+.autofiller-picking-cursor {
+  cursor: crosshair !important;
+}
+
+#autofiller-picker-overlay {
+  position: absolute;
+  z-index: 99999999 !important;
+  pointer-events: none;
+  background: rgba(0, 242, 254, 0.15);
+  border: 2px dashed #00f2fe;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+  transition: all 0.1s ease-out;
+  border-radius: 4px;
+}
+
+/* Filled Field Glow Animation */
+@keyframes autofillerGlowPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.6);
+    border-color: #00f2fe;
+  }
+  50% {
+    box-shadow: 0 0 14px 4px rgba(0, 242, 254, 0.4);
+    border-color: #00f2fe;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 242, 254, 0);
+  }
+}
+
+.autofiller-filled-glow {
+  animation: autofillerGlowPulse 1.2s ease-out !important;
+}
+
+/* Injected Floating Widget Card */
+.autofiller-widget-card {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  width: 320px;
+  background: rgba(11, 15, 26, 0.92) !important;
+  backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+  z-index: 9999999 !important;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  color: #f3f4f6 !important;
+  overflow: hidden;
+  box-sizing: border-box !important;
+  transition: box-shadow 0.3s ease;
+}
+
+.autofiller-widget-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 242, 254, 0.15) !important;
+  border-color: rgba(0, 242, 254, 0.3) !important;
+}
+
+.autofiller-widget-card.minimized {
+  width: 200px !important;
+  border-radius: 12px !important;
+}
+
+/* Header */
+.autofiller-widget-header {
+  padding: 12px 16px !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  cursor: move !important;
+  user-select: none !important;
+}
+
+.autofiller-widget-title {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #00f2fe !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+}
+
+.autofiller-widget-controls button {
+  background: none !important;
+  border: none !important;
+  color: #9ca3af !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  padding: 2px !important;
+  transition: transform 0.2s ease !important;
+}
+
+.autofiller-widget-controls button:hover {
+  color: #fff !important;
+  transform: scale(1.1) !important;
+}
+
+/* Body */
+.autofiller-widget-body {
+  padding: 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+/* Search Row in Widget */
+.autofiller-search-row input {
+  width: 100% !important;
+  padding: 8px 12px !important;
+  background: rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 8px !important;
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  box-sizing: border-box !important;
+  transition: all 0.2s ease !important;
+}
+
+.autofiller-search-row input:focus {
+  outline: none !important;
+  border-color: #00f2fe !important;
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.25) !important;
+}
+
+/* Navigation Row in Widget */
+.autofiller-nav-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 8px !important;
+  padding: 6px 10px !important;
+}
+
+.autofiller-btn-nav {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.autofiller-btn-nav:hover:not(:disabled) {
+  border-color: #00f2fe !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.autofiller-btn-nav:disabled {
+  opacity: 0.3 !important;
+  cursor: not-allowed !important;
+}
+
+#autofiller-widget-indicator {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #9ca3af !important;
+}
+
+/* Row Preview Area */
+.autofiller-row-preview {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.autofiller-row-preview .row-num {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.autofiller-row-preview .row-status {
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  padding: 1px 6px !important;
+  border-radius: 9999px !important;
+}
+
+.autofiller-row-preview .row-status.pending {
+  background: rgba(245, 158, 11, 0.12) !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(245, 158, 11, 0.2) !important;
+}
+
+.autofiller-row-preview .row-status.completed {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+.autofiller-row-preview .preview-scroll {
+  max-height: 100px !important;
+  overflow-y: auto !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(0, 0, 0, 0.25) !important;
+  border-radius: 8px !important;
+  padding: 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+/* Custom mini scrollbar for preview */
+.autofiller-row-preview .preview-scroll::-webkit-scrollbar {
+  width: 4px !important;
+}
+.autofiller-row-preview .preview-scroll::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+.autofiller-row-preview .preview-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-radius: 2px !important;
+}
+
+.preview-item {
+  display: flex !important;
+  justify-content: space-between !important;
+  font-size: 11px !important;
+  gap: 8px !important;
+}
+
+.preview-key {
+  color: #9ca3af !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
+}
+
+.preview-val {
+  color: #fff !important;
+  font-weight: 600 !important;
+  text-align: right !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.no-row {
+  font-size: 12px !important;
+  color: #6b7280 !important;
+  text-align: center !important;
+  padding: 12px 0 !important;
+}
+
+/* Checkbox Row inside Widget */
+.autofiller-sent-row {
+  display: flex !important;
+  align-items: center !important;
+  padding: 4px 0 !important;
+}
+
+.autofiller-checkbox-container {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  user-select: none !important;
+}
+
+.autofiller-checkbox-container input[type="checkbox"] {
+  width: 15px !important;
+  height: 15px !important;
+  accent-color: #00f2fe !important;
+  cursor: pointer !important;
+}
+
+.autofiller-checkbox-label {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #f3f4f6 !important;
+}
+
+/* Widget Actions */
+.autofiller-widget-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  margin-top: 4px !important;
+}
+
+.autofiller-widget-btn {
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid transparent !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.autofiller-btn-fill {
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%) !important;
+  color: #000 !important;
+}
+.autofiller-btn-fill:hover {
+  box-shadow: 0 4px 12px rgba(0, 242, 254, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Toast Notification Styles */
+.autofiller-toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999999999 !important;
+}
+
+.autofiller-toast {
+  background: rgba(11, 15, 26, 0.9) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(0, 242, 254, 0.3) !important;
+  border-radius: 12px !important;
+  padding: 12px 18px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+  color: #fff !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  animation: toastSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  max-width: 380px !important;
+}
+
+.toast-logo {
+  color: #00f2fe !important;
+  font-size: 16px !important;
+  text-shadow: 0 0 8px rgba(0, 242, 254, 0.5) !important;
+}
+
+.autofiller-toast.toast-fadeout {
+  animation: toastFadeOut 0.4s forwards !important;
+}
+
+@keyframes toastSlideIn {
+  from { transform: translateX(-40px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes toastFadeOut {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(20px); opacity: 0; }
+}

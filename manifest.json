@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Smart Form Autofiller (Excel/CSV)",
+  "version": "1.0.0",
+  "description": "It should probably works, somehow",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {},
+  "side_panel": {
+    "default_path": "sidebar.html"
+  },
+  "options_page": "dashboard.html",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ]
+}

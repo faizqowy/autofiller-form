@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Form Autofiller Sidebar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="brand">
+      <span class="logo">⚡</span>
+      <div>
+        <h2>Smart Autofiller</h2>
+        <p id="db-status">No database loaded</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content Panel -->
+  <main class="content">
+    <!-- Search Bar -->
+    <div class="search-card">
+      <input type="text" id="sidebar-search" placeholder="Search database...">
+    </div>
+
+    <!-- Active Row Status -->
+    <div class="card glass-card active-row-card">
+      <div class="card-header-nav">
+        <span class="card-label">Row Navigator</span>
+        <div class="nav-controls">
+          <button id="prev-row" class="btn-nav" title="Previous row">◀</button>
+          <span id="row-indicator">0 of 0</span>
+          <button id="next-row" class="btn-nav" title="Next row">▶</button>
+        </div>
+      </div>
+      
+      <div id="active-row-details" class="active-details">
+        <p class="placeholder-text">Please upload Excel or CSV data in the Dashboard to start.</p>
+      </div>
+
+      <div id="manual-sent-container" class="sent-container" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+        <label class="checkbox-container">
+          <input type="checkbox" id="sidebar-sent-checkbox">
+          <span class="checkbox-label">Mark as Sent (Checklisted)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Settings Card -->
+    <div class="card glass-card settings-card">
+      <span class="card-label">Autofill Settings</span>
+      
+      <div class="control-row" style="margin-bottom: 12px;">
+        <span class="control-label">Fill Mode</span>
+        <div class="toggle-buttons">
+          <button id="mode-manual" class="btn-toggle active">Manual</button>
+          <button id="mode-auto" class="btn-toggle">Auto</button>
+        </div>
+      </div>
+
+      <div class="form-group" id="delay-container" style="display: none;">
+        <label for="sidebar-delay">Auto Delay (seconds)</label>
+        <input type="number" id="sidebar-delay" value="3" min="1" max="60">
+      </div>
+
+      <div class="form-group" id="autotrack-container" style="margin-top: 10px;">
+        <label class="checkbox-container">
+          <input type="checkbox" id="sidebar-autotrack-checkbox">
+          <span class="checkbox-label">Auto Track Submission</span>
+        </label>
+        <p class="input-help" style="margin-top: 4px;">Automatically detects page reload / AJAX submits in Manual mode.</p>
+      </div>
+    </div>
+
+    <!-- Collapsible Field Mapping -->
+    <div class="card glass-card mappings-card">
+      <div class="collapsible-header" id="toggle-mappings">
+        <span class="card-label" style="margin-bottom: 0;">Field Mappings</span>
+        <span class="chevron" id="mapping-chevron">▼</span>
+      </div>
+      <div id="sidebar-mappings-container" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+        <div id="sidebar-mapping-list" class="mapping-list">
+          <div class="empty-mapping">Upload a file first to configure mappings.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button id="fill-now" class="btn btn-primary btn-full" disabled>⚡ Fill Selected Row</button>
+      <button id="toggle-page-widget" class="btn btn-secondary btn-full">🖥️ Show Page Widget</button>
+      <button id="open-dashboard" class="btn btn-secondary btn-full">⚙️ Open Dashboard</button>
+    </div>
+  </main>
+
+  <script src="sidebar.js"></script>
+</body>
+</html>
